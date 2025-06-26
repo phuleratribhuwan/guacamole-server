@@ -129,6 +129,7 @@ const char* GUAC_RDP_CLIENT_ARGS[] = {
     "recording-write-existing",
     "resize-method",
     "enable-audio-input",
+    "enable-webcam",
     "enable-touch",
     "read-only",
 
@@ -604,6 +605,12 @@ enum RDP_ARGS_IDX {
      * connection, "false" or blank otherwise.
      */
     IDX_ENABLE_AUDIO_INPUT,
+
+    /**
+     * "true" if webcam redirection should be enabled for the RDP connection,
+     * "false" or blank otherwise.
+     */
+    IDX_ENABLE_WEBCAM,
 
     /**
      * "true" if multi-touch support should be enabled for the RDP connection,
@@ -1260,6 +1267,11 @@ guac_rdp_settings* guac_rdp_parse_args(guac_user* user,
         guac_user_parse_args_boolean(user, GUAC_RDP_CLIENT_ARGS, argv,
                 IDX_ENABLE_AUDIO_INPUT, 0);
 
+    /* Webcam redirection enable/disable */
+    settings->enable_webcam =
+        guac_user_parse_args_boolean(user, GUAC_RDP_CLIENT_ARGS, argv,
+                IDX_ENABLE_WEBCAM, 0);
+
     /* Set gateway hostname */
     settings->gateway_hostname =
         guac_user_parse_args_string(user, GUAC_RDP_CLIENT_ARGS, argv,
@@ -1607,6 +1619,11 @@ void guac_rdp_push_settings(guac_client* client,
     /* Audio capture */
     freerdp_settings_set_bool(rdp_settings, FreeRDP_AudioCapture, guac_settings->enable_audio_input);
 
+    /* Webcam redirection */
+#ifdef FreeRDP_VideoCapture
+    freerdp_settings_set_bool(rdp_settings, FreeRDP_VideoCapture, guac_settings->enable_webcam);
+#endif
+
     /* Display Update channel */
     freerdp_settings_set_bool(rdp_settings, FreeRDP_SupportDisplayControl, 
             (guac_settings->resize_method == GUAC_RESIZE_DISPLAY_UPDATE));
@@ -1621,8 +1638,9 @@ void guac_rdp_push_settings(guac_client* client,
     }
 
     /* Device redirection */
-    freerdp_settings_set_bool(rdp_settings, FreeRDP_DeviceRedirection, 
-            (guac_settings->audio_enabled || guac_settings->drive_enabled || guac_settings->printing_enabled));
+    freerdp_settings_set_bool(rdp_settings, FreeRDP_DeviceRedirection,
+            (guac_settings->audio_enabled || guac_settings->drive_enabled
+             || guac_settings->printing_enabled || guac_settings->enable_webcam));
 
     /* Security */
     switch (guac_settings->security_mode) {
@@ -1842,6 +1860,11 @@ void guac_rdp_push_settings(guac_client* client,
     /* Audio capture */
     rdp_settings->AudioCapture = guac_settings->enable_audio_input;
 
+    /* Webcam redirection */
+#ifdef FreeRDP_VideoCapture
+    rdp_settings->VideoCapture = guac_settings->enable_webcam;
+#endif
+
     /* Display Update channel */
     rdp_settings->SupportDisplayControl =
         (guac_settings->resize_method == GUAC_RESIZE_DISPLAY_UPDATE);
@@ -1858,7 +1881,8 @@ void guac_rdp_push_settings(guac_client* client,
     /* Device redirection */
     rdp_settings->DeviceRedirection =  guac_settings->audio_enabled
                                     || guac_settings->drive_enabled
-                                    || guac_settings->printing_enabled;
+                                    || guac_settings->printing_enabled
+                                    || guac_settings->enable_webcam;
 
     /* Security */
     switch (guac_settings->security_mode) {

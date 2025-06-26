@@ -126,7 +126,8 @@ static BOOL rdp_freerdp_load_channels(freerdp* instance) {
     /* If RDPSND/RDPDR required, load them */
     if (settings->printing_enabled
         || settings->drive_enabled
-        || settings->audio_enabled) {
+        || settings->audio_enabled
+        || settings->enable_webcam) {
         guac_rdpdr_load_plugin(context);
         guac_rdpsnd_load_plugin(context);
     }
