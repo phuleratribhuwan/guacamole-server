@@ -153,7 +153,8 @@ libguac_client_rdp_la_LIBADD = \
 
 freerdp_LTLIBRARIES =            \
     libguac-common-svc-client.la \
-    libguacai-client.la
+    libguacai-client.la \
+    libguacvc-client.la
 
 freerdpdir = @FREERDP_PLUGIN_DIR@
 
@@ -199,6 +200,30 @@ libguacai_client_la_LDFLAGS =      \
     @RDP_LIBS@
 
 libguacai_client_la_LIBADD = \
+    @COMMON_LTLIB@           \
+    @LIBGUAC_LTLIB@
+
+#
+# Webcam virtual channel
+#
+
+libguacvc_client_la_SOURCES =           \
+    channels/webcam/webcam.c      \
+    plugins/guacvc/guacvc.c       \
+    plugins/ptr-string.c
+
+libguacvc_client_la_CFLAGS = \
+    -Werror -Wall -Iinclude       \
+    @COMMON_INCLUDE@              \
+    @LIBGUAC_INCLUDE@             \
+    @RDP_CFLAGS@
+
+libguacvc_client_la_LDFLAGS =      \
+    -module -avoid-version -shared \
+    @PTHREAD_LIBS@                 \
+    @RDP_LIBS@
+
+libguacvc_client_la_LIBADD = \
     @COMMON_LTLIB@           \
     @LIBGUAC_LTLIB@
 
