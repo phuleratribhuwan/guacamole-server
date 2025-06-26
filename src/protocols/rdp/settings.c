@@ -130,6 +130,7 @@ const char* GUAC_RDP_CLIENT_ARGS[] = {
     "resize-method",
     "enable-audio-input",
     "enable-touch",
+    "enable-webcam",
     "read-only",
 
     "gateway-hostname",
@@ -610,6 +611,12 @@ enum RDP_ARGS_IDX {
      * "false" or blank otherwise.
      */
     IDX_ENABLE_TOUCH,
+
+    /**
+     * "true" if webcam redirection should be enabled for the RDP connection,
+     * "false" or blank otherwise.
+     */
+    IDX_ENABLE_WEBCAM,
 
     /**
      * "true" if this connection should be read-only (user input should be
@@ -1259,6 +1266,11 @@ guac_rdp_settings* guac_rdp_parse_args(guac_user* user,
     settings->enable_audio_input =
         guac_user_parse_args_boolean(user, GUAC_RDP_CLIENT_ARGS, argv,
                 IDX_ENABLE_AUDIO_INPUT, 0);
+
+    /* Webcam redirection enable/disable */
+    settings->enable_webcam =
+        guac_user_parse_args_boolean(user, GUAC_RDP_CLIENT_ARGS, argv,
+                IDX_ENABLE_WEBCAM, 0);
 
     /* Set gateway hostname */
     settings->gateway_hostname =

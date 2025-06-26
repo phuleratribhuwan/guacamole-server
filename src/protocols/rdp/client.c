@@ -23,6 +23,7 @@
 #include "channels/disp.h"
 #include "channels/pipe-svc.h"
 #include "channels/rail.h"
+#include "channels/webcam.h"
 #include "config.h"
 #include "fs.h"
 #include "log.h"
@@ -218,6 +219,9 @@ int guac_client_init(guac_client* client, int argc, char** argv) {
     /* Init multi-touch support module (RDPEI) */
     rdp_client->rdpei = guac_rdp_rdpei_alloc(client);
 
+    /* Init webcam channel */
+    rdp_client->webcam = guac_rdp_webcam_alloc(client);
+
     /* Redirect FreeRDP log messages to guac_client_log() */
     guac_rdp_redirect_wlog(client);
 
@@ -275,6 +279,9 @@ int guac_rdp_client_free_handler(guac_client* client) {
 
     /* Free multi-touch support module (RDPEI) */
     guac_rdp_rdpei_free(rdp_client->rdpei);
+
+    /* Free webcam channel */
+    guac_rdp_webcam_free(rdp_client->webcam);
 
     /* Clean up filesystem, if allocated */
     if (rdp_client->filesystem != NULL)

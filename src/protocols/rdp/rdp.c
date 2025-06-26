@@ -119,6 +119,10 @@ static BOOL rdp_freerdp_load_channels(freerdp* instance) {
         guac_rwlock_release_lock(&(rdp_client->lock));
     }
 
+    /* Load webcam channel if enabled */
+    if (settings->enable_webcam)
+        guac_rdp_webcam_load_plugin(context);
+
     /* Load "cliprdr" service if not disabled */
     if (!(settings->disable_copy && settings->disable_paste))
         guac_rdp_clipboard_load_plugin(rdp_client->clipboard, context);
