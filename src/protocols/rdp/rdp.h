@@ -24,6 +24,7 @@
 #include "channels/cliprdr.h"
 #include "channels/disp.h"
 #include "channels/rdpei.h"
+#include "channels/webcam.h"
 #include "common/clipboard.h"
 #include "common/list.h"
 #include "config.h"
@@ -217,6 +218,11 @@ typedef struct guac_rdp_client {
      * Multi-touch support module (RDPEI).
      */
     guac_rdp_rdpei* rdpei;
+
+    /**
+     * Webcam support channel.
+     */
+    guac_rdp_webcam* webcam;
 
     /**
      * List of all available static virtual channels.
