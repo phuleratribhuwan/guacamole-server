@@ -43,6 +43,10 @@
 
 #include <pthread.h>
 #include <stddef.h>
+#include <string.h>
+
+static int guac_rdp_user_pipe_handler(guac_user* user, guac_stream* stream,
+        char* mimetype, char* name);
 
 int guac_rdp_user_join_handler(guac_user* user, int argc, char** argv) {
 
