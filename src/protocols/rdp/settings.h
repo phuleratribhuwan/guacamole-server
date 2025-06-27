@@ -622,6 +622,11 @@ typedef struct guac_rdp_settings {
     int enable_touch;
 
     /**
+     * Whether webcam redirection is enabled.
+     */
+    int enable_webcam;
+
+    /**
      * The hostname of the remote desktop gateway that should be used as an
      * intermediary for the remote desktop connection. If no gateway should
      * be used, this will be NULL.

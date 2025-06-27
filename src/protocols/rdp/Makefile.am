@@ -57,6 +57,7 @@ libguac_client_rdp_la_SOURCES =                  \
     channels/rdpdr/rdpdr.c                       \
     channels/rdpei.c                             \
     channels/rdpgfx.c                            \
+    channels/webcam.c                           \
     channels/rdpsnd/rdpsnd-messages.c            \
     channels/rdpsnd/rdpsnd.c                     \
     client.c                                     \
@@ -103,6 +104,7 @@ noinst_HEADERS =                                 \
     channels/rdpdr/rdpdr.h                       \
     channels/rdpei.h                             \
     channels/rdpgfx.h                            \
+    channels/webcam.h                            \
     channels/rdpsnd/rdpsnd-messages.h            \
     channels/rdpsnd/rdpsnd.h                     \
     client.h                                     \
