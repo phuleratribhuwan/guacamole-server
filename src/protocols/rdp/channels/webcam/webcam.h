@@ -1,5 +1,5 @@
-#ifndef GUAC_RDP_CHANNELS_WEBCAM_H
-#define GUAC_RDP_CHANNELS_WEBCAM_H
+#ifndef GUAC_RDP_CHANNELS_WEBCAM_PLUGIN_H
+#define GUAC_RDP_CHANNELS_WEBCAM_PLUGIN_H
 
 #include <freerdp/freerdp.h>
 #include <guacamole/user.h>
@@ -18,4 +18,4 @@ int guac_rdp_webcam_end_handler(guac_user* user, guac_stream* stream);
 /* Adds Guacamole's webcam plugin to the dynamic channel list */
 void guac_rdp_webcam_load_plugin(rdpContext* context);
 
-#endif
+#endif /* GUAC_RDP_CHANNELS_WEBCAM_PLUGIN_H */
