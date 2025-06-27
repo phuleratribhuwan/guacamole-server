@@ -177,6 +177,11 @@ typedef struct guac_rdp_client {
     guac_rdp_audio_buffer* audio_input;
 
     /**
+     * The virtual channel used for webcam redirection, if enabled.
+     */
+    IWTSVirtualChannel* webcam_channel;
+
+    /**
      * The filesystem being shared, if any.
      */
     guac_rdp_fs* filesystem;

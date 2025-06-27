@@ -28,6 +28,7 @@
 #include "channels/rdpdr/rdpdr.h"
 #include "channels/rdpei.h"
 #include "channels/rdpgfx.h"
+#include "channels/webcam/webcam.h"
 #include "channels/rdpsnd/rdpsnd.h"
 #include "client.h"
 #include "color.h"
@@ -119,9 +120,9 @@ static BOOL rdp_freerdp_load_channels(freerdp* instance) {
         guac_rwlock_release_lock(&(rdp_client->lock));
     }
 
-    /* Load webcam channel if enabled */
+    /* Load webcam plugin if enabled */
     if (settings->enable_webcam)
-        guac_rdp_webcam_load_plugin(context);
+        guac_rdp_webcam_load_plugin(GUAC_RDP_CONTEXT(instance));
 
     /* Load "cliprdr" service if not disabled */
     if (!(settings->disable_copy && settings->disable_paste))

@@ -20,6 +20,7 @@
 #include "channels/audio-input/audio-input.h"
 #include "channels/cliprdr.h"
 #include "channels/pipe-svc.h"
+#include "channels/webcam/webcam.h"
 #include "config.h"
 #include "input.h"
 #include "rdp.h"
@@ -106,8 +107,8 @@ int guac_rdp_user_join_handler(guac_user* user, int argc, char** argv) {
         /* Set generic (non-filesystem) file upload handler */
         user->file_handler = guac_rdp_user_file_handler;
 
-        /* Inbound arbitrary named pipes */
-        user->pipe_handler = guac_rdp_pipe_svc_pipe_handler;
+        /* Inbound arbitrary named pipes (including webcam streams) */
+        user->pipe_handler = guac_rdp_user_pipe_handler;
         
         /* If we own it, register handler for updating parameters during connection. */
         if (user->owner)
@@ -146,6 +147,18 @@ int guac_rdp_user_file_handler(guac_user* user, guac_stream* stream,
     guac_socket_flush(user->socket);
 
     return 0;
+}
+
+static int guac_rdp_user_pipe_handler(guac_user* user, guac_stream* stream,
+        char* mimetype, char* name) {
+
+    guac_rdp_client* rdp_client = (guac_rdp_client*) user->client->data;
+    guac_rdp_settings* settings = rdp_client->settings;
+
+    if (settings->enable_webcam && strcmp(name, "webcam") == 0)
+        return guac_rdp_webcam_handler(user, stream, mimetype, name);
+
+    return guac_rdp_pipe_svc_pipe_handler(user, stream, mimetype, name);
 }
 
 int guac_rdp_user_leave_handler(guac_user* user) {
